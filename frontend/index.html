@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>City Traffic Intelligence</title>
+
+    <!-- Leaflet Map -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <!-- Our CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">🚦</div>
+
+            <div>
+                <h2>City<span>AI</span></h2>
+                <p>TRAFFIC INTELLIGENCE</p>
+            </div>
+        </div>
+
+        <nav>
+
+            <p class="menu-title">MAIN</p>
+
+            <button class="nav-item active" data-page="dashboard">
+                <span>📊</span>
+                Dashboard
+            </button>
+
+            <button class="nav-item" data-page="vehicles">
+                <span>🚗</span>
+                Vehicle Intelligence
+            </button>
+
+            <button class="nav-item" data-page="anpr">
+                <span>🔍</span>
+                ANPR / OCR
+            </button>
+
+            <button class="nav-item" data-page="trajectory">
+                <span>🛣️</span>
+                Trajectories
+            </button>
+
+            <p class="menu-title">MONITORING</p>
+
+            <button class="nav-item" data-page="cameras">
+                <span>📹</span>
+                Cameras
+            </button>
+
+            <button class="nav-item" data-page="analytics">
+                <span>📈</span>
+                Traffic Analytics
+            </button>
+
+            <button class="nav-item" data-page="congestion">
+                <span>🚦</span>
+                Congestion
+            </button>
+
+        </nav>
+
+        <div class="system-status">
+            <div class="status-dot"></div>
+            <div>
+                <strong>System Online</strong>
+                <small>Backend connected</small>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="main">
+
+        <!-- HEADER -->
+        <header class="topbar">
+
+            <div>
+                <h1 id="page-title">City Traffic Dashboard</h1>
+                <p id="page-subtitle">
+                    Real-time AI-powered urban traffic intelligence
+                </p>
+            </div>
+
+            <div class="header-right">
+
+                <div class="connection">
+                    <span class="status-dot"></span>
+                    <span id="connection-status">
+                        Connecting...
+                    </span>
+                </div>
+
+                <button class="refresh-btn" onclick="loadDashboardData()">
+                    ↻ Refresh
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= DASHBOARD PAGE ================= -->
+        <section id="dashboard" class="page active">
+
+            <!-- STAT CARDS -->
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">🚗</div>
+
+                    <div>
+                        <p>Total Vehicles</p>
+                        <h2 id="total-vehicles">--</h2>
+                        <small>Detected vehicles</small>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon purple">📡</div>
+
+                    <div>
+                        <p>Total Detections</p>
+                        <h2 id="total-detections">--</h2>
+                        <small>ANPR detections</small>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon green">📹</div>
+
+                    <div>
+                        <p>Active Cameras</p>
+                        <h2 id="total-cameras">--</h2>
+                        <small>Camera network</small>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">⚡</div>
+
+                    <div>
+                        <p>Average Speed</p>
+                        <h2>
+                            <span id="average-speed">--</span>
+                            <small class="unit">km/h</small>
+                        </h2>
+
+                        <small>Citywide average</small>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- MAP + CONGESTION -->
+            <div class="dashboard-grid">
+
+                <div class="panel map-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h3>City Traffic Map</h3>
+                            <p>Camera network & vehicle movement</p>
+                        </div>
+
+                        <div class="map-legend">
+
+                            <span>
+                                <i class="legend-camera"></i>
+                                Camera
+                            </span>
+
+                            <span>
+                                <i class="legend-road"></i>
+                                Road
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div id="map"></div>
+
+                </div>
+
+
+                <div class="panel congestion-panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <h3>Congestion Status</h3>
+                            <p>Based on average vehicle speed</p>
+                        </div>
+                    </div>
+
+                    <div class="congestion-content">
+
+                        <div id="congestion-circle"
+                             class="congestion-circle">
+
+                            <span id="congestion-level">
+                                --
+                            </span>
+
+                        </div>
+
+                        <div class="congestion-info">
+
+                            <h2 id="congestion-title">
+                                Loading...
+                            </h2>
+
+                            <p>
+                                Average speed:
+                                <strong>
+                                    <span id="congestion-speed">--</span>
+                                    km/h
+                                </strong>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="congestion-scale">
+
+                        <span class="low">LOW</span>
+                        <span class="medium">MEDIUM</span>
+                        <span class="high">HIGH</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- LOWER DASHBOARD -->
+            <div class="dashboard-grid lower-grid">
+
+                <!-- CAMERAS -->
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h3>Camera Network</h3>
+                            <p>Registered city cameras</p>
+                        </div>
+
+                        <button
+                            class="small-btn"
+                            onclick="showPage('cameras')">
+                            View All
+                        </button>
+
+                    </div>
+
+                    <div id="camera-list" class="camera-list">
+
+                        <div class="loading">
+                            Loading cameras...
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ANALYTICS -->
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h3>Traffic Overview</h3>
+                            <p>Current city statistics</p>
+                        </div>
+
+                    </div>
+
+                    <div class="analytics-list">
+
+                        <div class="analytics-row">
+
+                            <div>
+                                <span class="analytics-icon">🚗</span>
+                                Vehicles
+                            </div>
+
+                            <strong id="overview-vehicles">
+                                --
+                            </strong>
+
+                        </div>
+
+
+                        <div class="analytics-row">
+
+                            <div>
+                                <span class="analytics-icon">📡</span>
+                                Detections
+                            </div>
+
+                            <strong id="overview-detections">
+                                --
+                            </strong>
+
+                        </div>
+
+
+                        <div class="analytics-row">
+
+                            <div>
+                                <span class="analytics-icon">📹</span>
+                                Cameras
+                            </div>
+
+                            <strong id="overview-cameras">
+                                --
+                            </strong>
+
+                        </div>
+
+
+                        <div class="analytics-row">
+
+                            <div>
+                                <span class="analytics-icon">⚡</span>
+                                Average Speed
+                            </div>
+
+                            <strong>
+                                <span id="overview-speed">--</span>
+                                km/h
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- VEHICLE SEARCH -->
+            <div class="panel search-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h3>Vehicle Journey Search</h3>
+                        <p>
+                            Search a vehicle using its number plate
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="search-box">
+
+                    <input
+                        type="text"
+                        id="vehicle-search"
+                        placeholder="Enter plate number e.g. KA01AB1234"
+                    >
+
+                    <button onclick="searchVehicle()">
+                        🔍 Search Vehicle
+                    </button>
+
+                </div>
+
+                <div id="vehicle-result"></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= VEHICLE INTELLIGENCE ================= -->
+        <section id="vehicles" class="page">
+
+            <div class="page-heading">
+                <h2>Vehicle Intelligence</h2>
+                <p>
+                    Global vehicle identification and journey analysis
+                </p>
+            </div>
+
+            <div class="feature-grid">
+
+                <div class="feature-card">
+                    <span>🚗</span>
+                    <h3>Global Vehicle ID</h3>
+                    <p>
+                        Track the same vehicle across multiple cameras.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <span>🔢</span>
+                    <h3>License Plate</h3>
+                    <p>
+                        Identify vehicles using ANPR plate recognition.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <span>🛣️</span>
+                    <h3>Journey Tracking</h3>
+                    <p>
+                        View the complete route followed by a vehicle.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <span>⚡</span>
+                    <h3>Speed Analysis</h3>
+                    <p>
+                        Calculate average vehicle speed.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h3>Vehicle Search</h3>
+                        <p>Search by license plate number</p>
+                    </div>
+
+                </div>
+
+                <div class="search-box">
+
+                    <input
+                        type="text"
+                        id="vehicle-search-2"
+                        placeholder="KA01AB1234"
+                    >
+
+                    <button onclick="searchVehicleFromPage()">
+                        Search
+                    </button>
+
+                </div>
+
+                <div id="vehicle-result-2"></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ANPR PAGE ================= -->
+        <section id="anpr" class="page">
+
+            <div class="page-heading">
+
+                <h2>ANPR / OCR</h2>
+
+                <p>
+                    Automatic Number Plate Recognition
+                </p>
+
+            </div>
+
+            <div class="feature-grid">
+
+                <div class="feature-card">
+                    <span>🔍</span>
+                    <h3>Plate Detection</h3>
+                    <p>
+                        Detect vehicle registration plates from camera feeds.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <span>🔤</span>
+                    <h3>OCR Recognition</h3>
+                    <p>
+                        Extract license plate characters.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <span>🎯</span>
+                    <h3>Vehicle Matching</h3>
+                    <p>
+                        Match detections across different cameras.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <div>
+                        <h3>ANPR Detection Information</h3>
+                        <p>
+                            Detection data received from the backend
+                        </p>
+                    </div>
+                </div>
+
+                <div class="empty-state">
+                    <span>📡</span>
+                    <h3>Waiting for detection data</h3>
+                    <p>
+                        ANPR detection endpoint can be connected
+                        when available in the backend.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= TRAJECTORY PAGE ================= -->
+        <section id="trajectory" class="page">
+
+            <div class="page-heading">
+
+                <h2>Vehicle Trajectories</h2>
+
+                <p>
+                    Multi-camera vehicle movement tracking
+                </p>
+
+            </div>
+
+            <div class="panel trajectory-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h3>Trajectory Map</h3>
+                        <p>
+                            Search a vehicle to display its journey
+                        </p>
+                    </div>
+
+                </div>
+
+                <div id="trajectory-map"></div>
+
+            </div>
+
+            <div id="trajectory-details" class="panel">
+
+                <div class="empty-state">
+                    <span>🛣️</span>
+                    <h3>No trajectory selected</h3>
+                    <p>
+                        Search for a vehicle using its license plate.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= CAMERAS PAGE ================= -->
+        <section id="cameras" class="page">
+
+            <div class="page-heading">
+
+                <h2>Camera Network</h2>
+
+                <p>
+                    City-wide traffic camera locations
+                </p>
+
+            </div>
+
+            <div id="all-cameras" class="camera-grid">
+
+                <div class="loading">
+                    Loading cameras...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ANALYTICS PAGE ================= -->
+        <section id="analytics" class="page">
+
+            <div class="page-heading">
+
+                <h2>Traffic Analytics</h2>
+
+                <p>
+                    City-wide traffic statistics
+                </p>
+
+            </div>
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">🚗</div>
+
+                    <div>
+                        <p>Total Vehicles</p>
+                        <h2 id="analytics-vehicles">--</h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon purple">📡</div>
+
+                    <div>
+                        <p>Total Detections</p>
+                        <h2 id="analytics-detections">--</h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">📹</div>
+
+                    <div>
+                        <p>Total Cameras</p>
+                        <h2 id="analytics-cameras">--</h2>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">⚡</div>
+
+                    <div>
+                        <p>Average Speed</p>
+                        <h2>
+                            <span id="analytics-speed">--</span>
+                            <small class="unit">km/h</small>
+                        </h2>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= CONGESTION PAGE ================= -->
+        <section id="congestion" class="page">
+
+            <div class="page-heading">
+
+                <h2>Congestion Monitoring</h2>
+
+                <p>
+                    AI-based city congestion status
+                </p>
+
+            </div>
+
+            <div class="congestion-large">
+
+                <div id="congestion-circle-large"
+                     class="congestion-circle large">
+
+                    <span id="congestion-level-large">
+                        --
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <h2 id="congestion-title-large">
+                        Loading...
+                    </h2>
+
+                    <p>
+                        Current average speed:
+                        <strong>
+                            <span id="congestion-speed-large">
+                                --
+                            </span>
+                            km/h
+                        </strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- Leaflet -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Our JavaScript -->
+<script src="script.js"></script>
+
+</body>
+</html>

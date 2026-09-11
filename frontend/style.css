@@ -1,0 +1,1266 @@
+/* =========================================================
+   CITY TRAFFIC INTELLIGENCE
+   Main Dashboard Styles
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #07111f;
+    --sidebar: #091625;
+    --panel: #0d1b2d;
+    --panel-light: #12243a;
+    --border: #1c3149;
+
+    --text: #f1f5f9;
+    --muted: #8495aa;
+
+    --blue: #2f8cff;
+    --purple: #8b5cf6;
+    --green: #22c55e;
+    --orange: #f59e0b;
+    --red: #ef4444;
+
+    --radius: 12px;
+}
+
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+
+/* =========================================================
+   MAIN APP
+   ========================================================= */
+
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar {
+    width: 250px;
+    background: var(--sidebar);
+    border-right: 1px solid var(--border);
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 24px 15px;
+
+    z-index: 1000;
+}
+
+
+/* LOGO */
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 0 10px 25px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.logo-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #102a47;
+    border-radius: 10px;
+
+    font-size: 22px;
+}
+
+.logo h2 {
+    font-size: 20px;
+    letter-spacing: 0.5px;
+}
+
+.logo h2 span {
+    color: var(--blue);
+}
+
+.logo p {
+    font-size: 8px;
+    color: var(--muted);
+    letter-spacing: 1.2px;
+    margin-top: 3px;
+}
+
+
+/* NAVIGATION */
+
+nav {
+    margin-top: 25px;
+}
+
+.menu-title {
+    font-size: 10px;
+    color: #566a82;
+    letter-spacing: 1.5px;
+
+    padding: 0 12px;
+    margin: 18px 0 8px;
+}
+
+.nav-item {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    border: none;
+    background: transparent;
+
+    color: var(--muted);
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    margin-bottom: 4px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+    text-align: left;
+
+    transition: 0.2s;
+}
+
+.nav-item span {
+    width: 22px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.nav-item:hover {
+    background: #102238;
+    color: var(--text);
+}
+
+.nav-item.active {
+    background: #12335a;
+    color: #ffffff;
+}
+
+
+/* SYSTEM STATUS */
+
+.system-status {
+    margin-top: auto;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background: #0c1c2e;
+
+    border: 1px solid var(--border);
+
+    padding: 12px;
+
+    border-radius: 10px;
+}
+
+.system-status strong {
+    display: block;
+    font-size: 11px;
+}
+
+.system-status small {
+    display: block;
+    color: var(--muted);
+    font-size: 9px;
+    margin-top: 3px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.main {
+    margin-left: 250px;
+
+    width: calc(100% - 250px);
+
+    padding: 25px 30px 50px;
+}
+
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.topbar h1 {
+    font-size: 24px;
+    margin-bottom: 6px;
+}
+
+.topbar p {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.connection {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.refresh-btn,
+.small-btn {
+    border: 1px solid var(--border);
+
+    background: var(--panel);
+
+    color: var(--text);
+
+    padding: 8px 13px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-size: 11px;
+
+    transition: 0.2s;
+}
+
+.refresh-btn:hover,
+.small-btn:hover {
+    background: var(--panel-light);
+    border-color: #315172;
+}
+
+
+/* =========================================================
+   PAGES
+   ========================================================= */
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.page-heading {
+    margin-bottom: 25px;
+}
+
+.page-heading h2 {
+    font-size: 22px;
+    margin-bottom: 7px;
+}
+
+.page-heading p {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   STAT CARDS
+   ========================================================= */
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+.stat-card {
+    background: var(--panel);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    padding: 18px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    min-height: 110px;
+
+    transition: 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    border-color: #294664;
+}
+
+.stat-card p {
+    color: var(--muted);
+
+    font-size: 11px;
+
+    margin-bottom: 7px;
+}
+
+.stat-card h2 {
+    font-size: 24px;
+
+    margin-bottom: 5px;
+}
+
+.stat-card small {
+    color: #62778f;
+    font-size: 9px;
+}
+
+.stat-card .unit {
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.stat-icon {
+    width: 43px;
+    height: 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    font-size: 19px;
+
+    flex-shrink: 0;
+}
+
+.stat-icon.blue {
+    background: rgba(47, 140, 255, 0.14);
+}
+
+.stat-icon.purple {
+    background: rgba(139, 92, 246, 0.14);
+}
+
+.stat-icon.green {
+    background: rgba(34, 197, 94, 0.14);
+}
+
+.stat-icon.orange {
+    background: rgba(245, 158, 11, 0.14);
+}
+
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.panel {
+    background: var(--panel);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    overflow: hidden;
+
+    margin-bottom: 18px;
+}
+
+.panel-header {
+    min-height: 64px;
+
+    padding: 16px 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-header h3 {
+    font-size: 14px;
+
+    margin-bottom: 4px;
+}
+
+.panel-header p {
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   DASHBOARD GRID
+   ========================================================= */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns: 2fr 1fr;
+
+    gap: 18px;
+
+    margin-bottom: 18px;
+}
+
+.lower-grid {
+    grid-template-columns: 1.3fr 1fr;
+}
+
+
+/* =========================================================
+   MAP
+   ========================================================= */
+
+.map-panel {
+    min-height: 410px;
+}
+
+#map {
+    height: 345px;
+    width: 100%;
+}
+
+#trajectory-map {
+    height: 450px;
+    width: 100%;
+}
+
+
+/* Leaflet dark map */
+
+.leaflet-container {
+    background: #081321;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+    background: #0d1b2d;
+    color: white;
+}
+
+.leaflet-popup-content {
+    font-size: 11px;
+}
+
+.leaflet-control-zoom a {
+    background: #0d1b2d !important;
+    color: white !important;
+    border-color: #29415d !important;
+}
+
+
+/* MAP LEGEND */
+
+.map-legend {
+    display: flex;
+    gap: 14px;
+
+    color: var(--muted);
+
+    font-size: 9px;
+}
+
+.map-legend span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.legend-camera {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: var(--blue);
+}
+
+.legend-road {
+    width: 14px;
+    height: 2px;
+
+    background: var(--orange);
+}
+
+
+/* =========================================================
+   CONGESTION
+   ========================================================= */
+
+.congestion-panel {
+    min-height: 410px;
+}
+
+.congestion-content {
+    display: flex;
+
+    align-items: center;
+
+    gap: 22px;
+
+    padding: 35px 25px;
+}
+
+.congestion-circle {
+    width: 125px;
+    height: 125px;
+
+    border-radius: 50%;
+
+    border: 8px solid #263c54;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: #0a1727;
+}
+
+.congestion-circle span {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.congestion-circle.low {
+    border-color: var(--green);
+}
+
+.congestion-circle.medium {
+    border-color: var(--orange);
+}
+
+.congestion-circle.high {
+    border-color: var(--red);
+}
+
+.congestion-info h2 {
+    font-size: 18px;
+
+    margin-bottom: 10px;
+}
+
+.congestion-info p {
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+.congestion-info strong {
+    color: white;
+}
+
+.congestion-scale {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin: 0 22px 20px;
+
+    font-size: 9px;
+    font-weight: bold;
+}
+
+.congestion-scale .low {
+    color: var(--green);
+}
+
+.congestion-scale .medium {
+    color: var(--orange);
+}
+
+.congestion-scale .high {
+    color: var(--red);
+}
+
+
+/* LARGE CONGESTION */
+
+.congestion-large {
+    background: var(--panel);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    min-height: 280px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 40px;
+}
+
+.congestion-circle.large {
+    width: 180px;
+    height: 180px;
+
+    border-width: 12px;
+}
+
+.congestion-circle.large span {
+    font-size: 20px;
+}
+
+.congestion-large h2 {
+    margin-bottom: 12px;
+}
+
+.congestion-large p {
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   CAMERA LIST
+   ========================================================= */
+
+.camera-list {
+    padding: 10px 18px 15px;
+}
+
+.camera-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #16283c;
+}
+
+.camera-row:last-child {
+    border-bottom: none;
+}
+
+.camera-info {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.camera-icon {
+    width: 34px;
+    height: 34px;
+
+    border-radius: 8px;
+
+    background: #122941;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.camera-info strong {
+    display: block;
+    font-size: 11px;
+}
+
+.camera-info small {
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    margin-top: 3px;
+}
+
+.camera-status {
+    color: var(--green);
+
+    font-size: 9px;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.camera-status::before {
+    content: "";
+
+    width: 6px;
+    height: 6px;
+
+    background: var(--green);
+
+    border-radius: 50%;
+}
+
+
+/* CAMERA GRID */
+
+.camera-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 16px;
+}
+
+.camera-card {
+    background: var(--panel);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    padding: 18px;
+
+    transition: 0.2s;
+}
+
+.camera-card:hover {
+    border-color: #315172;
+    transform: translateY(-2px);
+}
+
+.camera-card-icon {
+    font-size: 28px;
+
+    margin-bottom: 12px;
+}
+
+.camera-card h3 {
+    font-size: 13px;
+
+    margin-bottom: 5px;
+}
+
+.camera-card p {
+    color: var(--muted);
+
+    font-size: 10px;
+
+    margin-bottom: 10px;
+}
+
+.camera-location {
+    font-size: 10px;
+    color: #9db0c6;
+}
+
+.camera-coordinates {
+    color: #607890;
+    font-size: 9px;
+    margin-top: 5px;
+}
+
+
+/* =========================================================
+   ANALYTICS
+   ========================================================= */
+
+.analytics-list {
+    padding: 8px 18px 14px;
+}
+
+.analytics-row {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid #16283c;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+.analytics-row:last-child {
+    border-bottom: none;
+}
+
+.analytics-row strong {
+    color: white;
+
+    font-size: 13px;
+}
+
+.analytics-icon {
+    margin-right: 7px;
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.search-panel {
+    padding-bottom: 18px;
+}
+
+.search-box {
+    display: flex;
+
+    gap: 10px;
+
+    padding: 18px;
+}
+
+.search-box input {
+    flex: 1;
+
+    background: #091625;
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    padding: 12px 14px;
+
+    color: white;
+
+    outline: none;
+
+    font-size: 12px;
+}
+
+.search-box input:focus {
+    border-color: var(--blue);
+}
+
+.search-box input::placeholder {
+    color: #52677e;
+}
+
+.search-box button {
+    background: var(--blue);
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 0 20px;
+
+    cursor: pointer;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.search-box button:hover {
+    opacity: 0.85;
+}
+
+
+/* =========================================================
+   VEHICLE RESULT
+   ========================================================= */
+
+.vehicle-result {
+    margin: 0 18px;
+
+    border-top: 1px solid var(--border);
+
+    padding-top: 18px;
+}
+
+.vehicle-summary {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+.vehicle-stat {
+    background: #091625;
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    padding: 14px;
+}
+
+.vehicle-stat p {
+    color: var(--muted);
+
+    font-size: 9px;
+
+    margin-bottom: 5px;
+}
+
+.vehicle-stat strong {
+    font-size: 14px;
+}
+
+.detection-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.detection-item {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+
+    gap: 10px;
+
+    background: #091625;
+
+    border: 1px solid #172a40;
+
+    border-radius: 7px;
+
+    padding: 11px;
+
+    font-size: 10px;
+}
+
+.detection-item span {
+    color: var(--muted);
+}
+
+.detection-item strong {
+    display: block;
+
+    color: white;
+
+    margin-top: 3px;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   FEATURE CARDS
+   ========================================================= */
+
+.feature-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+.feature-card {
+    background: var(--panel);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    padding: 20px;
+
+    min-height: 150px;
+
+    transition: 0.2s;
+}
+
+.feature-card:hover {
+    transform: translateY(-2px);
+
+    border-color: #315172;
+}
+
+.feature-card > span {
+    display: block;
+
+    font-size: 25px;
+
+    margin-bottom: 12px;
+}
+
+.feature-card h3 {
+    font-size: 13px;
+
+    margin-bottom: 8px;
+}
+
+.feature-card p {
+    color: var(--muted);
+
+    font-size: 10px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   EMPTY / LOADING STATES
+   ========================================================= */
+
+.loading {
+    padding: 25px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+.empty-state {
+    min-height: 180px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 30px;
+}
+
+.empty-state span {
+    font-size: 32px;
+
+    margin-bottom: 12px;
+}
+
+.empty-state h3 {
+    font-size: 14px;
+
+    margin-bottom: 7px;
+}
+
+.empty-state p {
+    color: var(--muted);
+
+    font-size: 10px;
+
+    max-width: 400px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   TRAJECTORY
+   ========================================================= */
+
+.trajectory-panel {
+    overflow: hidden;
+}
+
+#trajectory-details {
+    padding: 0;
+}
+
+.trajectory-header {
+    padding: 18px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.trajectory-header h3 {
+    margin-bottom: 5px;
+}
+
+.trajectory-header p {
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+.trajectory-detections {
+    padding: 18px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .camera-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        width: 210px;
+    }
+
+    .main {
+        margin-left: 210px;
+
+        width: calc(100% - 210px);
+
+        padding: 20px;
+    }
+
+    .dashboard-grid,
+    .lower-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .sidebar {
+        position: relative;
+
+        width: 100%;
+
+        height: auto;
+
+        min-height: auto;
+    }
+
+    .app {
+        flex-direction: column;
+    }
+
+    .main {
+        margin-left: 0;
+
+        width: 100%;
+    }
+
+    .stats-grid,
+    .feature-grid,
+    .camera-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .header-right {
+        width: 100%;
+
+        justify-content: space-between;
+    }
+
+    .congestion-large {
+        flex-direction: column;
+
+        padding: 35px;
+    }
+
+    .vehicle-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .detection-item {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
