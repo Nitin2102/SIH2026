@@ -1,9 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker } from 'react-leaflet';
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Polyline,
+  CircleMarker
+} from 'react-leaflet';
 import L from 'leaflet';
-import { MapPin, Navigation, Flame, Activity } from 'lucide-react';
-import { fetchCameras, fetchCurrentTraffic, fetchHeatmapData } from '../services/api';
-import { Camera, TrafficMetric, HeatmapPoint, TrajectoryEvent } from '../types';
+import { Flame, Activity } from 'lucide-react';
+import {
+  fetchCameras,
+  fetchCurrentTraffic,
+  fetchHeatmapData
+} from '../services/api';
+import {
+  Camera,
+  TrafficMetric,
+  HeatmapPoint,
+  TrajectoryEvent
+} from '../types';
 
 interface CityMapViewProps {
   highlightTrajectory?: TrajectoryEvent[];
@@ -29,7 +45,9 @@ const createCameraIcon = (color: string) => {
   });
 };
 
-export const CityMapView: React.FC<CityMapViewProps> = ({ highlightTrajectory }) => {
+export const CityMapView: React.FC<CityMapViewProps> = ({
+  highlightTrajectory
+}) => {
   const [cameras, setCameras] = useState<Camera[]>([]);
   const [traffic, setTraffic] = useState<TrafficMetric[]>([]);
   const [heatmap, setHeatmap] = useState<HeatmapPoint[]>([]);
@@ -43,91 +61,171 @@ export const CityMapView: React.FC<CityMapViewProps> = ({ highlightTrajectory })
           fetchCurrentTraffic(),
           fetchHeatmapData(heatmapMode)
         ]);
+
         setCameras(cData);
         setTraffic(tData);
         setHeatmap(hData);
       } catch (err) {
-        console.error("Map load error:", err);
+        console.error('Map load error:', err);
       }
     };
+
     load();
+
     const interval = setInterval(load, 5000);
+
     return () => clearInterval(interval);
   }, [heatmapMode]);
 
-  // Road connections geometry vectors between cameras
+  // Road connections between camera nodes
   const roadConnections = [
-    { from: "CAM-01", to: "CAM-02" },
-    { from: "CAM-02", to: "CAM-03" },
-    { from: "CAM-02", to: "CAM-04" },
-    { from: "CAM-02", to: "CAM-05" },
-    { from: "CAM-03", to: "CAM-06" },
-    { from: "CAM-03", to: "CAM-08" },
-    { from: "CAM-04", to: "CAM-08" },
-    { from: "CAM-05", to: "CAM-07" },
-    { from: "CAM-01", to: "CAM-06" },
+    { from: 'CAM-01', to: 'CAM-02' },
+    { from: 'CAM-02', to: 'CAM-03' },
+    { from: 'CAM-02', to: 'CAM-04' },
+    { from: 'CAM-02', to: 'CAM-05' },
+    { from: 'CAM-03', to: 'CAM-06' },
+    { from: 'CAM-03', to: 'CAM-08' },
+    { from: 'CAM-04', to: 'CAM-08' },
+    { from: 'CAM-05', to: 'CAM-07' },
+    { from: 'CAM-01', to: 'CAM-06' }
   ];
 
-  // Helper to find camera coordinates by ID
+  // Find camera coordinates by ID
   const getCamCoords = (id: string): [number, number] | null => {
-    const c = cameras.find(cam => cam.id === id);
-    return c ? [c.lat, c.lng] : null;
+    const camera = cameras.find(cam => cam.id === id);
+
+    if (!camera) {
+      return null;
+    }
+
+    return [camera.lat, camera.lng];
   };
 
-  // Trajectory polyline coordinates if vehicle search active
+  // Vehicle trajectory
   const trajectoryPositions: [number, number][] = highlightTrajectory
-    ? highlightTrajectory.map(e => [e.lat, e.lng])
+    ? highlightTrajectory.map(event => [event.lat, event.lng])
     : [];
 
   return (
     <div>
-      <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div
+        style={{
+          marginBottom: '1.5rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}
+      >
         <div>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '0.25rem' }}>Virtual City GIS Map & Spatial Intelligence</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Interactive map displaying 8 camera nodes, road segment congestion lines, density heatmaps, and vehicle route playback</p>
+          <h1
+            style={{
+              fontSize: '1.8rem',
+              fontWeight: 800,
+              marginBottom: '0.25rem'
+            }}
+          >
+            Virtual City GIS Map & Spatial Intelligence
+          </h1>
+
+          <p
+            style={{
+              color: 'var(--text-secondary)',
+              fontSize: '0.9rem'
+            }}
+          >
+            Interactive map displaying camera nodes, road segment
+            congestion, traffic density, and vehicle route playback
+          </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.5rem', background: 'rgba(16, 22, 36, 0.8)', padding: '0.4rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+        {/* Heatmap Controls */}
+        <div
+          style={{
+            display: 'flex',
+            gap: '0.5rem',
+            background: 'rgba(16, 22, 36, 0.8)',
+            padding: '0.4rem',
+            borderRadius: '8px',
+            border: '1px solid var(--border-color)'
+          }}
+        >
           <button
-            className={`btn ${heatmapMode === 'density' ? 'btn-primary' : ''}`}
-            style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem', background: heatmapMode === 'density' ? undefined : 'transparent' }}
+            className={`btn ${
+              heatmapMode === 'density' ? 'btn-primary' : ''
+            }`}
+            style={{
+              fontSize: '0.8rem',
+              padding: '0.35rem 0.75rem',
+              background:
+                heatmapMode === 'density'
+                  ? undefined
+                  : 'transparent'
+            }}
             onClick={() => setHeatmapMode('density')}
           >
-            <Flame size={14} /> Traffic Density
+            <Flame size={14} />
+            Traffic Density
           </button>
+
           <button
-            className={`btn ${heatmapMode === 'congestion' ? 'btn-primary' : ''}`}
-            style={{ fontSize: '0.8rem', padding: '0.35rem 0.75rem', background: heatmapMode === 'congestion' ? undefined : 'transparent' }}
+            className={`btn ${
+              heatmapMode === 'congestion' ? 'btn-primary' : ''
+            }`}
+            style={{
+              fontSize: '0.8rem',
+              padding: '0.35rem 0.75rem',
+              background:
+                heatmapMode === 'congestion'
+                  ? undefined
+                  : 'transparent'
+            }}
             onClick={() => setHeatmapMode('congestion')}
           >
-            <Activity size={14} /> Congestion Index
+            <Activity size={14} />
+            Congestion Index
           </button>
         </div>
       </div>
 
-      <div className="glass-panel" style={{ padding: '0.75rem' }}>
+      <div
+        className="glass-panel"
+        style={{
+          padding: '0.75rem'
+        }}
+      >
         <div className="map-container">
           <MapContainer
             center={[12.9750, 77.5950]}
             zoom={13}
-            style={{ height: '100%', width: '100%', background: '#0a0d14' }}
+            style={{
+              height: '100%',
+              width: '100%'
+            }}
             scrollWheelZoom={true}
           >
-            {/* Dark GIS Map Tile Layer */}
+            {/* FREE OPENSTREETMAP TILE LAYER */}
             <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {/* ROAD NETWORK POLYLINE EDGES */}
-            {roadConnections.map((conn, idx) => {
-              const c1 = getCamCoords(conn.from);
-              const c2 = getCamCoords(conn.to);
-              if (!c1 || !c2) return null;
+            {/* ROAD NETWORK */}
+            {roadConnections.map((connection, index) => {
+              const c1 = getCamCoords(connection.from);
+              const c2 = getCamCoords(connection.to);
 
-              const t1 = traffic.find(t => t.camera_id === conn.from);
-              const congestion = t1?.congestion_level || 'FREE';
-              const colors: Record<string, string> = {
+              if (!c1 || !c2) {
+                return null;
+              }
+
+              const trafficData = traffic.find(
+                item => item.camera_id === connection.from
+              );
+
+              const congestion =
+                trafficData?.congestion_level || 'FREE';
+
+              const congestionColors: Record<string, string> = {
                 FREE: '#10b981',
                 MODERATE: '#f59e0b',
                 HEAVY: '#ef4444',
@@ -136,33 +234,44 @@ export const CityMapView: React.FC<CityMapViewProps> = ({ highlightTrajectory })
 
               return (
                 <Polyline
-                  key={idx}
+                  key={index}
                   positions={[c1, c2]}
                   pathOptions={{
-                    color: colors[congestion] || '#10b981',
-                    weight: 4,
-                    opacity: 0.85,
-                    dashArray: congestion === 'HEAVY' || congestion === 'SEVERE' ? '6, 6' : undefined
+                    color:
+                      congestionColors[congestion] ||
+                      '#10b981',
+                    weight: 5,
+                    opacity: 0.9,
+                    dashArray:
+                      congestion === 'HEAVY' ||
+                      congestion === 'SEVERE'
+                        ? '8, 8'
+                        : undefined
                   }}
                 />
               );
             })}
 
-            {/* HEATMAP CIRCLE OVERLAYS */}
-            {heatmap.map((pt) => (
+            {/* TRAFFIC HEATMAP */}
+            {heatmap.map(point => (
               <CircleMarker
-                key={pt.camera_id}
-                center={[pt.lat, pt.lng]}
-                radius={28 * pt.intensity + 10}
+                key={point.camera_id}
+                center={[point.lat, point.lng]}
+                radius={28 * point.intensity + 10}
                 pathOptions={{
-                  fillColor: pt.intensity > 0.7 ? '#ef4444' : (pt.intensity > 0.4 ? '#f59e0b' : '#00e5ff'),
+                  fillColor:
+                    point.intensity > 0.7
+                      ? '#ef4444'
+                      : point.intensity > 0.4
+                      ? '#f59e0b'
+                      : '#00e5ff',
                   fillOpacity: 0.35,
                   stroke: false
                 }}
               />
             ))}
 
-            {/* HIGHLIGHTED VEHICLE TRAJECTORY ROUTE */}
+            {/* VEHICLE TRAJECTORY */}
             {trajectoryPositions.length > 0 && (
               <Polyline
                 positions={trajectoryPositions}
@@ -175,23 +284,87 @@ export const CityMapView: React.FC<CityMapViewProps> = ({ highlightTrajectory })
               />
             )}
 
-            {/* CAMERA NODE MARKERS */}
-            {cameras.map((cam) => {
-              const t = traffic.find(tr => tr.camera_id === cam.id);
-              const color = t?.congestion_level === 'SEVERE' ? '#a855f7' : (t?.congestion_level === 'HEAVY' ? '#ef4444' : '#00e5ff');
+            {/* CAMERA MARKERS */}
+            {cameras.map(camera => {
+              const trafficData = traffic.find(
+                item => item.camera_id === camera.id
+              );
+
+              const color =
+                trafficData?.congestion_level === 'SEVERE'
+                  ? '#a855f7'
+                  : trafficData?.congestion_level === 'HEAVY'
+                  ? '#ef4444'
+                  : '#00e5ff';
+
               return (
                 <Marker
-                  key={cam.id}
-                  position={[cam.lat, cam.lng]}
+                  key={camera.id}
+                  position={[camera.lat, camera.lng]}
                   icon={createCameraIcon(color)}
                 >
                   <Popup>
-                    <div style={{ color: '#000', padding: '0.25rem' }}>
-                      <strong style={{ fontSize: '1rem', color: '#000' }}>{cam.id}: {cam.name}</strong>
-                      <div style={{ fontSize: '0.85rem', marginTop: '0.25rem' }}>Location: {cam.location}</div>
-                      <div style={{ fontSize: '0.85rem' }}>Vehicles Tracked: <strong>{t?.vehicle_count || 0}</strong></div>
-                      <div style={{ fontSize: '0.85rem' }}>Avg Speed: <strong>{t?.avg_speed_kmh || 50} km/h</strong></div>
-                      <div style={{ fontSize: '0.85rem' }}>Status: <strong style={{ color: color }}>{t?.congestion_level || 'FREE'}</strong></div>
+                    <div
+                      style={{
+                        color: '#000',
+                        padding: '0.25rem'
+                      }}
+                    >
+                      <strong
+                        style={{
+                          fontSize: '1rem',
+                          color: '#000'
+                        }}
+                      >
+                        {camera.id}: {camera.name}
+                      </strong>
+
+                      <div
+                        style={{
+                          fontSize: '0.85rem',
+                          marginTop: '0.25rem'
+                        }}
+                      >
+                        Location: {camera.location}
+                      </div>
+
+                      <div
+                        style={{
+                          fontSize: '0.85rem'
+                        }}
+                      >
+                        Vehicles Tracked:{' '}
+                        <strong>
+                          {trafficData?.vehicle_count || 0}
+                        </strong>
+                      </div>
+
+                      <div
+                        style={{
+                          fontSize: '0.85rem'
+                        }}
+                      >
+                        Avg Speed:{' '}
+                        <strong>
+                          {trafficData?.avg_speed_kmh || 50} km/h
+                        </strong>
+                      </div>
+
+                      <div
+                        style={{
+                          fontSize: '0.85rem'
+                        }}
+                      >
+                        Status:{' '}
+                        <strong
+                          style={{
+                            color
+                          }}
+                        >
+                          {trafficData?.congestion_level ||
+                            'FREE'}
+                        </strong>
+                      </div>
                     </div>
                   </Popup>
                 </Marker>
