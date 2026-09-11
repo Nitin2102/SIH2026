@@ -1,0 +1,139 @@
+city_name: "Metropolis Traffic Network"
+center_lat: 12.9750
+center_lng: 77.5950
+zoom_level: 13
+
+cameras:
+  - id: "CAM-01"
+    name: "North Gate Boulevard"
+    location: "North Gate Entrance"
+    lat: 12.9815
+    lng: 77.5946
+    direction: "SOUTHBOUND"
+    fps: 15
+    speed_limit_kmh: 60
+    connected_roads: ["CAM-02", "CAM-06"]
+    reference_distance_m: 25.0
+    status: "active"
+
+  - id: "CAM-02"
+    name: "Central Grand Junction"
+    location: "City Center Square"
+    lat: 12.9750
+    lng: 77.5950
+    direction: "EASTBOUND"
+    fps: 15
+    speed_limit_kmh: 50
+    connected_roads: ["CAM-01", "CAM-03", "CAM-04", "CAM-05"]
+    reference_distance_m: 20.0
+    status: "active"
+
+  - id: "CAM-03"
+    name: "East Tech Park Junction"
+    location: "IT Corridor East"
+    lat: 12.9750
+    lng: 77.6050
+    direction: "EASTBOUND"
+    fps: 15
+    speed_limit_kmh: 60
+    connected_roads: ["CAM-02", "CAM-06", "CAM-08"]
+    reference_distance_m: 22.0
+    status: "active"
+
+  - id: "CAM-04"
+    name: "South Gateway Interchange"
+    location: "South Metro Gate"
+    lat: 12.9650
+    lng: 77.5950
+    direction: "NORTHBOUND"
+    fps: 15
+    speed_limit_kmh: 50
+    connected_roads: ["CAM-02", "CAM-05", "CAM-08"]
+    reference_distance_m: 20.0
+    status: "active"
+
+  - id: "CAM-05"
+    name: "West Avenue Cross"
+    location: "Commercial Hub West"
+    lat: 12.9750
+    lng: 77.5850
+    direction: "EASTBOUND"
+    fps: 15
+    speed_limit_kmh: 45
+    connected_roads: ["CAM-02", "CAM-04", "CAM-07"]
+    reference_distance_m: 18.0
+    status: "active"
+
+  - id: "CAM-06"
+    name: "Airport Expressway Express"
+    location: "Airport North Corridor"
+    lat: 12.9900
+    lng: 77.6100
+    direction: "SOUTHBOUND"
+    fps: 15
+    speed_limit_kmh: 80
+    connected_roads: ["CAM-01", "CAM-03"]
+    reference_distance_m: 30.0
+    status: "active"
+
+  - id: "CAM-07"
+    name: "Old Market Road"
+    location: "Downtown Market Zone"
+    lat: 12.9700
+    lng: 77.5880
+    direction: "NORTHBOUND"
+    fps: 15
+    speed_limit_kmh: 40
+    connected_roads: ["CAM-05", "CAM-04"]
+    reference_distance_m: 15.0
+    status: "active"
+
+  - id: "CAM-08"
+    name: "Highway Interstate 10"
+    location: "East Highway Toll Gate"
+    lat: 12.9550
+    lng: 77.6150
+    direction: "WESTBOUND"
+    fps: 15
+    speed_limit_kmh: 70
+    connected_roads: ["CAM-03", "CAM-04"]
+    reference_distance_m: 25.0
+    status: "active"
+
+roads:
+  - from: "CAM-01"
+    to: "CAM-02"
+    distance_km: 0.72
+    free_flow_speed_kmh: 60
+  - from: "CAM-02"
+    to: "CAM-03"
+    distance_km: 1.08
+    free_flow_speed_kmh: 50
+  - from: "CAM-02"
+    to: "CAM-04"
+    distance_km: 1.11
+    free_flow_speed_kmh: 50
+  - from: "CAM-02"
+    to: "CAM-05"
+    distance_km: 1.08
+    free_flow_speed_kmh: 50
+  - from: "CAM-03"
+    to: "CAM-06"
+    distance_km: 1.76
+    free_flow_speed_kmh: 60
+  - from: "CAM-03"
+    to: "CAM-08"
+    distance_km: 2.45
+    free_flow_speed_kmh: 60
+  - from: "CAM-04"
+    to: "CAM-08"
+    distance_km: 2.43
+    free_flow_speed_kmh: 50
+  - from: "CAM-05"
+    to: "CAM-07"
+    distance_km: 0.63
+    free_flow_speed_kmh: 40
+  - from: "CAM-01"
+    to: "CAM-06"
+    distance_km: 1.90
+    free_flow_speed_kmh: 70
